@@ -1,0 +1,254 @@
+{
+	"info": {
+		"_postman_id": "1b646aa9-cfb6-4439-beb9-928203417795",
+		"name": "api-pinturas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36660539",
+		"_collection_link": "https://red-rocket-873826.postman.co/workspace/ejemplos~6bea4e68-5ed0-4cf4-a4cb-b4a35dc9e4c2/collection/36660539-1b646aa9-cfb6-4439-beb9-928203417795?action=share&source=collection_link&creator=36660539"
+	},
+	"item": [
+		{
+			"name": "get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://utnfra-api-pinturas.onrender.com/pinturas",
+					"protocol": "https",
+					"host": [
+						"utnfra-api-pinturas",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"pinturas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-pintura",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://utnfra-api-pinturas.onrender.com/pinturas/1",
+					"protocol": "https",
+					"host": [
+						"utnfra-api-pinturas",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"pinturas",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache",
+						"name": "cache-control",
+						"type": "text"
+					},
+					{
+						"key": "Postman-Token",
+						"value": "<calculated when request is sent>",
+						"name": "postman-token",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/plain",
+						"name": "content-type",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Length",
+						"value": "<calculated when request is sent>",
+						"name": "content-length",
+						"type": "text"
+					},
+					{
+						"key": "Host",
+						"value": "<calculated when request is sent>",
+						"name": "host",
+						"type": "text"
+					},
+					{
+						"key": "User-Agent",
+						"value": "PostmanRuntime/7.39.1",
+						"name": "user-agent",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"name": "accept",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"name": "accept-encoding",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"name": "connection",
+						"type": "text"
+					},
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"marca\": \"Venier\",\r\n  \"precio\": 301.5,\r\n  \"color\": \"#9933ff\",\r\n  \"cantidad\": 250\r\n}",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://utnfra-api-pinturas.onrender.com/pinturas",
+					"protocol": "https",
+					"host": [
+						"utnfra-api-pinturas",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"pinturas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache",
+						"name": "cache-control",
+						"type": "text"
+					},
+					{
+						"key": "Postman-Token",
+						"value": "<calculated when request is sent>",
+						"name": "postman-token",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "text/plain",
+						"name": "content-type",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Length",
+						"value": "<calculated when request is sent>",
+						"name": "content-length",
+						"type": "text"
+					},
+					{
+						"key": "Host",
+						"value": "<calculated when request is sent>",
+						"name": "host",
+						"type": "text"
+					},
+					{
+						"key": "User-Agent",
+						"value": "PostmanRuntime/7.39.1",
+						"name": "user-agent",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"name": "accept",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"name": "accept-encoding",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"name": "connection",
+						"type": "text"
+					},
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"marca\": \"Venier exterior\",\r\n  \"precio\": 309.9,\r\n  \"color\": \"#ff6699\",\r\n  \"cantidad\": 66\r\n}",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://utnfra-api-pinturas.onrender.com/pinturas/1747007997761",
+					"protocol": "https",
+					"host": [
+						"utnfra-api-pinturas",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"pinturas",
+						"1747007997761"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://utnfra-api-pinturas.onrender.com/pinturas/1747008560417",
+					"protocol": "https",
+					"host": [
+						"utnfra-api-pinturas",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"pinturas",
+						"1747008560417"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
