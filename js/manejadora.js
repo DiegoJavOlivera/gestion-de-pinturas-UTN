@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("resize", () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            crearTablaPinturas(); // Re-render table/cards after resizing stops
-        }, 200); // Debounce time
+            crearTablaPinturas(); 
+        }, 200); 
     });
 
     document.getElementById("btnAgregar").addEventListener("click", agregarPintura)
@@ -33,13 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btnPromedio = document.getElementById("btnPromedio");
     if (btnPromedio) {
-        btnPromedio.addEventListener("click", async () => {
-            const data = await solicitudes();
-            if (!Array.isArray(data)) return;
+        btnPromedio.addEventListener("click", promedio);
+    }
+    const btnEstadisticas = document.getElementById("btnEstadistica")
+    if(btnEstadisticas){
+        btnEstadisticas.addEventListener("click", ejecutarFuncionesEstadisticas )
+    }
 
-            const promedio = data.reduce((acc, pintura) => acc + pintura.precio, 0) / data.length;
-            alert(`El precio promedio de las pinturas es: $${promedio.toFixed(2)}`);
-        });
+    const btnExportar = document.getElementById("btnCSV");
+    if(btnExportar){
+        btnExportar.addEventListener("click", exportarCSV)
     }
 });
 
@@ -120,7 +123,7 @@ async function alertaExitoError(mensaje = "", tipo = "success") {
 
 
     const alerta = document.createElement("div");
-    alerta.classList.add("alert", "alert-" + tipo, "alert-dismissible", "fade", "show");
+    alerta.classList.add("alert", "alert-" + tipo, "alert-dismissible", "fade", "show", "mt-4");
     alerta.setAttribute("role", "alert");
     alerta.textContent = mensaje;
 
@@ -144,7 +147,6 @@ async function agregarPintura(e){
     const pintura = await obtenerDatosFormulario()
     const res = await solicitudes("", "POST", pintura)
     if(res){
-        console.log(res)
         crearTablaPinturas()
         limpiarFormulario()
         alertaExitoError("Pintura agregada con exito")
@@ -152,7 +154,6 @@ async function agregarPintura(e){
     }
     alertaExitoError("Error al agregar la pintura", "danger")
 }
-
 
 
 async function obtenerKeysPinturas(){
@@ -176,12 +177,13 @@ async function obtenerValoresPinturas(){
 async function crearTablaPinturas(data = null) {
     const listado = document.getElementById("divListado");
 
-    listado.innerHTML = ""; // Clear previous content
+    listado.innerHTML = "<spinner class='spinner-border text-primary m-4' role='status'><span class='visually-hidden'></span></spinner>"; 
 
     const keys = await obtenerKeysPinturas();
     const valores = data ? data.map(pintura => Object.values(pintura)) : await obtenerValoresPinturas();
 
     if (window.innerWidth < 770) {
+        listado.innerHTML = "";
         valores.forEach(valoresPintura => {
             const tableContainer = document.createElement("div");
             tableContainer.classList.add("table-responsive", "mb-3");
@@ -190,6 +192,7 @@ async function crearTablaPinturas(data = null) {
             table.classList.add("table", "table-bordered", "table-sm");
 
             const tbody = document.createElement("tbody");
+
 
             valoresPintura.forEach((valor, index) => {
                 const tr = document.createElement("tr");
@@ -236,7 +239,16 @@ async function crearTablaPinturas(data = null) {
                 const res = await solicitudes(id, "DELETE");
                 if (res) {
                     crearTablaPinturas();
+                    const listaAccordion = document.getElementById("flush-collapseTwo");
+                    const altaAccordion = document.getElementById("flush-collapseThree");
+
+                    const bootstrapCollapseLista = new bootstrap.Collapse(listaAccordion, { toggle: false });
+                    const bootstrapCollapseAlta = new bootstrap.Collapse(altaAccordion, { toggle: false });
+                    bootstrapCollapseLista.hide();
+                    bootstrapCollapseAlta.show();
+                    alertaExitoError("pintura eliminada con exito")
                 }
+                alertaExitoError("Error al eliminar la pintura", "danger")
             });
 
             const btnCargarFormulario = document.createElement("button");
@@ -263,6 +275,8 @@ async function crearTablaPinturas(data = null) {
                     bootstrapCollapseAlta.show();
                 }
             });
+
+            
 
             actionsCell.appendChild(btnEliminar);
             actionsCell.appendChild(btnCargarFormulario);
@@ -331,7 +345,16 @@ async function crearTablaPinturas(data = null) {
                 const res = await solicitudes(id, "DELETE");
                 if (res) {
                     crearTablaPinturas();
+                    const listaAccordion = document.getElementById("flush-collapseTwo");
+                    const altaAccordion = document.getElementById("flush-collapseThree");
+
+                    const bootstrapCollapseLista = new bootstrap.Collapse(listaAccordion, { toggle: false });
+                    const bootstrapCollapseAlta = new bootstrap.Collapse(altaAccordion, { toggle: false });
+                    bootstrapCollapseLista.hide();
+                    bootstrapCollapseAlta.show();
+                    alertaExitoError("pintura eliminada con exito")
                 }
+                alertaExitoError("Error al eliminar la pintura", "danger")
             });
 
             const btnCargarFormulario = document.createElement("button");
@@ -366,6 +389,7 @@ async function crearTablaPinturas(data = null) {
             tr.appendChild(tdAcciones);
             tbody.appendChild(tr);
         });
+        listado.innerHTML = "";
         tabla.appendChild(tbody);
         tablaContainer.appendChild(tabla);
         listado.appendChild(tablaContainer);
@@ -393,7 +417,137 @@ async function cantidadPinturasCargadas(){
     return data.length;
 }
 
-cantidadPinturasCargadas()
+async function marcaMasComun(){
+    const data = await solicitudes();
+    if(!Array.isArray(data)) return;
+    const marcas = data.map(pintura => pintura.marca);
+    const contador = marcas.reduce((acumulador, marca) => {
+        acumulador[marca] = (acumulador[marca] || 0) + 1;
+
+        return acumulador;
+    }, {})
+    const max = Math.max(...Object.values(contador));
+    const marcaMasComun = Object.keys(contador).find(marca => contador[marca] === max);
+    
+    return marcaMasComun ? marcaMasComun : "No hay marcas cargadas";
+}
+
+async function pinturaMasCara() {
+    const data = await solicitudes();
+    if (!Array.isArray(data)) return;
+    const pinturaCara = data.reduce((max, pintura) => {
+        return pintura.precio > max.precio ? pintura : max;
+    }, { precio: 0 });
+
+    return pinturaCara;
+}
+
+async function promedioPorMarca() {
+    const data = await solicitudes();
+    if (!Array.isArray(data)) return;
+
+    const marcas = [...new Set(data.map(pintura => pintura.marca))];
+    const promedios = marcas.map(marca => {
+        const pinturasMarca = data.filter(pintura => pintura.marca === marca);
+        const promedio = pinturasMarca.reduce((acc, pintura) => acc + pintura.precio, 0) / pinturasMarca.length;
+        return { marca, promedio: promedio.toFixed(2) };
+    });
+
+    const promedioGeneral = (data.reduce((acc, pintura) => acc + pintura.precio, 0) / data.length).toFixed(2);
+
+
+
+    return { promedioGeneral, promedios };
+}
+
+async function promedio(){
+    const data = await solicitudes();
+    if (!Array.isArray(data)) return;
+
+    const promedio = data.reduce((acc, pintura) => acc + pintura.precio, 0) / data.length;
+    alert(`El precio promedio de las pinturas es: $${promedio.toFixed(2)}`);
+}
+
+async function ejecutarFuncionesEstadisticas() {
+    const divEstadisticas = document.getElementById("idEstadisticas");
+    divEstadisticas.innerHTML = "<spinner class='spinner-border text-primary m-5' role='status'><span class='visually-hidden'></span></spinner>"
+
+
+    const estadisticasContainer = document.createElement("div");
+    estadisticasContainer.classList.add("card", "p-3", "shadow-sm");
+
+    const titulo = document.createElement("h4");
+    titulo.textContent = "Estadísticas de Pinturería";
+    titulo.classList.add("text-center", "mb-3");
+    estadisticasContainer.appendChild(titulo);
+
+    const cantidadMasCargada = await cantidadPinturasCargadas();
+    const marcaComun = await marcaMasComun();
+    const pinturaCara = await pinturaMasCara();
+    const { promedioGeneral, promedios } = await promedioPorMarca();
+
+    const cantidadPinturas = document.createElement("p");
+    cantidadPinturas.innerHTML = `<strong>Cantidad de pinturas cargadas:</strong> ${cantidadMasCargada}`;
+    estadisticasContainer.appendChild(cantidadPinturas);
+
+    const marcaMasComunElemento = document.createElement("p");
+    marcaMasComunElemento.innerHTML = `<strong>Marca más común:</strong> ${marcaComun}`;
+    estadisticasContainer.appendChild(marcaMasComunElemento);
+
+    const pinturaMasCaraElemento = document.createElement("p");
+    pinturaMasCaraElemento.innerHTML = `<strong>Pintura más cara:</strong> ${pinturaCara.marca} - $${pinturaCara.precio}`;
+    estadisticasContainer.appendChild(pinturaMasCaraElemento);
+
+    const promedioGeneralElemento = document.createElement("p");
+    promedioGeneralElemento.innerHTML = `<strong>Promedio general de precios:</strong> $${promedioGeneral}`;
+    estadisticasContainer.appendChild(promedioGeneralElemento);
+
+    const promediosPorMarcaTitulo = document.createElement("h5");
+    promediosPorMarcaTitulo.textContent = "Promedio por marca:";
+    promediosPorMarcaTitulo.classList.add("mt-3");
+    estadisticasContainer.appendChild(promediosPorMarcaTitulo);
+
+    const listaPromedios = document.createElement("ul");
+    listaPromedios.classList.add("list-group");
+    promedios.forEach(({ marca, promedio }) => {
+        const item = document.createElement("li");
+        item.classList.add("list-group-item");
+        item.textContent = `${marca}: $${promedio}`;
+        listaPromedios.appendChild(item);
+    });
+    
+    divEstadisticas.innerHTML = "";
+
+    estadisticasContainer.appendChild(listaPromedios);
+
+    divEstadisticas.appendChild(estadisticasContainer);
+}
+
+async function exportarCSV() {
+    const listaDescargable = await solicitudes();
+    if (!Array.isArray(listaDescargable) || listaDescargable.length === 0) {
+        alertaExitoError("No hay datos para exportar", "danger");
+        return;
+    }
+
+    const cabeceras = Object.keys(listaDescargable[0]).join(',');
+    const filas = listaDescargable.map(obj => Object.values(obj).join(',')).join('\n');
+    const contenido = `${cabeceras}\n${filas}`;
+    const blob = new Blob([contenido], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'datos-exportados.csv';
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    }, 5000);
+
+    alertaExitoError("Datos exportados con éxito", "success");
+}
 
 
 function validarFormulario() {

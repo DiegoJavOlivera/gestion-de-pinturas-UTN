@@ -85,3 +85,27 @@ h1, h2, h3, h4, h5, h6, p, li, input, button, table, th, td {
     border: 2px solid #dc3545; 
     background-color: #f8d7da; 
 }
+
+#idEstadisticas .card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+}
+
+#idEstadisticas h4 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+#idEstadisticas p {
+    font-size: 1rem;
+    color: #555;
+}
+
+#idEstadisticas .list-group-item {
+    font-size: 0.9rem;
+    color: #333;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+}
