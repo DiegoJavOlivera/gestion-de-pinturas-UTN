@@ -2,12 +2,20 @@ document.addEventListener("DOMContentLoaded", () => {
     crearTablaPinturas()
 
     let resizeTimeout;
+    let lastWidthCategory = window.innerWidth < 770 ? 'mobile' : 'desktop';
+    let lastInnerWidth = window.innerWidth;
     window.addEventListener("resize", () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            crearTablaPinturas(); 
-        }, 2000); 
+            const currentWidthCategory = window.innerWidth < 770 ? 'mobile' : 'desktop';
+            if (currentWidthCategory !== lastWidthCategory && window.innerWidth !== lastInnerWidth) {
+                crearTablaPinturas();
+                lastWidthCategory = currentWidthCategory;
+                lastInnerWidth = window.innerWidth;
+            }
+        }, 200); 
     });
+
 
     document.getElementById("btnAgregar").addEventListener("click", agregarPintura)
     document.getElementById("btnModificar").addEventListener("click",modificarPintura)
