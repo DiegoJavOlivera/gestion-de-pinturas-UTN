@@ -1,13 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     crearTablaPinturas()
 
-    let resizeTimeout;
-    window.addEventListener("resize", () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            crearTablaPinturas(); 
-        }, 200); 
-    });
+
 
     document.getElementById("btnAgregar").addEventListener("click", agregarPintura)
     document.getElementById("btnModificar").addEventListener("click",modificarPintura)
