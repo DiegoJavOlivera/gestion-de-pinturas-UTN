@@ -2,10 +2,18 @@ document.addEventListener("DOMContentLoaded", () => {
     crearTablaPinturas()
 
     let resizeTimeout;
+    let lastWidthCategory = window.innerWidth < 770 ? 'mobile' : 'desktop';
+    let lastInnerWidth = window.innerWidth;
     window.addEventListener("resize", () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            crearTablaPinturas(); 
+            const currentWidthCategory = window.innerWidth < 770 ? 'mobile' : 'desktop';
+            // Solo recargar si realmente cambió el ancho (no solo por teclado virtual)
+            if (currentWidthCategory !== lastWidthCategory && window.innerWidth !== lastInnerWidth) {
+                crearTablaPinturas();
+                lastWidthCategory = currentWidthCategory;
+                lastInnerWidth = window.innerWidth;
+            }
         }, 200); 
     });
 
