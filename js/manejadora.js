@@ -241,6 +241,7 @@ async function crearTablaPinturas(data = null) {
                     bootstrapCollapseLista.hide();
                     bootstrapCollapseAlta.show();
                     alertaExitoError("pintura eliminada con exito")
+                    return;
                 }
                 alertaExitoError("Error al eliminar la pintura", "danger")
             });
@@ -337,6 +338,7 @@ async function crearTablaPinturas(data = null) {
                 let confirmacion = confirm("¿Estás seguro que deseas eliminar la pintura?");
                 if (!confirmacion) return;
                 const res = await solicitudes(id, "DELETE");
+                
                 if (res) {
                     crearTablaPinturas();
                     const listaAccordion = document.getElementById("flush-collapseTwo");
@@ -347,7 +349,9 @@ async function crearTablaPinturas(data = null) {
                     bootstrapCollapseLista.hide();
                     bootstrapCollapseAlta.show();
                     alertaExitoError("pintura eliminada con exito")
+                    return;
                 }
+
                 alertaExitoError("Error al eliminar la pintura", "danger")
             });
 
