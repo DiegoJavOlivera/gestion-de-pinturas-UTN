@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
             const currentWidthCategory = window.innerWidth < 770 ? 'mobile' : 'desktop';
-            // Solo recargar si realmente cambió el ancho (no solo por teclado virtual)
             if (currentWidthCategory !== lastWidthCategory && window.innerWidth !== lastInnerWidth) {
                 crearTablaPinturas();
                 lastWidthCategory = currentWidthCategory;
